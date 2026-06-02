@@ -1,66 +1,76 @@
 # 🛡️ LogosCyber: LLM-Powered Nuclei Template Generator & Scanner
 
-LogosCyber は、Google Gemini API を活用して自然言語のプロンプトから **Nuclei 互換の脆弱性スキャン用 YAML テンプレート**を自動生成し、その場ですぐにターゲットに対して簡易スキャンを実行できる Rust 製のネイティブ GUI アプリケーションです。
+LogosCyber is a lightweight native desktop GUI application written in Rust. It leverages the Google Gemini API to automatically generate **Nuclei-compatible YAML vulnerability scanning templates** from natural language prompts, allowing you to run quick verification scans against your targets immediately.
 
 ---
 
-## 🌟 主な機能
+## 🌟 Key Features
 
-*   **🤖 AI テンプレート自動生成**: 
-    「`/wp-config.php.bak` が存在するか確認して」「特定のヘッダーが含まれるか確認して」といった自然言語の指示から、即座に Nuclei 互換の YAML テンプレートを生成します。
-*   **⚡ 直感的な即時スキャン**: 
-    AI が生成した、または手動で記述した YAML テンプレートを、ターゲット URL に向けてその場ですぐにテスト実行できます。
-*   **📂 複数テンプレートの読み込み**:
-    ローカルにある既存の Nuclei テンプレートフォルダを選択して一括で読み込み、ターゲットに対して順番に連続スキャンを実行できます。
-*   **🔒 安全でセキュアな設計**:
-    *   外部のプロキシサーバーなどを経由せず、ローカルアプリから **Google Gemini API へ直接 HTTPS 通信**するため、API キーやプロンプトの内容が第三者に漏洩しません。
-    *   API の安全フィルターを適切に調整（`BLOCK_NONE`）しているため、セキュリティ監査用のテンプレート生成が AI に不当に拒否されるのを防ぎます。
-*   **🚀 軽量・高速なネイティブ UI**:
-    Rust の `eframe` (egui) を使用した、数百KBのメモリしか消費しない軽量で軽快なデスクトップアプリです。
-
----
-
-## 🛠️ 必要条件
-
-*   **Rust (Cargo)** ツールチェーン
-*   **Google Gemini API キー** (Google AI Studio 等で無料で取得可能)
+*   **🤖 AI Template Generation**:
+    Create templates simply by describing what you want to test (e.g., "Check if `/wp-config.php.bak` exists" or "Verify custom headers").
+*   **⚡ On-the-Fly Scanning**:
+    Instantly execute the generated or custom YAML template against a target URL to check for vulnerability matches.
+*   **📂 Multi-Template Directory Loading**:
+    Load a local directory containing multiple Nuclei templates to run sequential scans.
+*   **🔒 Secure Direct Connection**:
+    *   No local proxies required. The app communicates directly with Google's Gemini API over HTTPS, ensuring your API keys and target details remain confidential.
+    *   Optimized safety settings (`BLOCK_NONE`) prevent AI from falsely blocking security-related templates.
+*   **🚀 Lightweight Native UI**:
+    Uses the `eframe` (egui) library to provide a fast and lightweight native application experience (consuming only a few megabytes of RAM).
 
 ---
 
-## 🚀 ビルドと実行方法
+## 🛠️ Prerequisites
 
-以下のコマンドを実行して、リポジトリのクローンからアプリの起動まで行えます。
+*   **Rust (Cargo)** toolchain installed.
+*   **Google Gemini API Key** (available for free via Google AI Studio).
+
+---
+
+## 🚀 Build and Run
 
 ```bash
-# 1. リポジトリをクローン
-git clone https://github.com/あなたのユーザー名/logos-cyber.git
+# Clone the repository
+git clone https://github.com/OS-Sovereign/logos-cyber.git
 cd logos-cyber
 
-# 2. アプリの起動（依存関係は自動でインストールされます）
+# Build and run the application
 cargo run --release
 ```
 
 ---
 
-## 📖 使い方
+## 📖 How to Use
 
-1.  **ターゲット設定**: アプリ左上の `Target URL / IP` にスキャン対象のURLを入力します。
-2.  **API キーの入力**: `Gemini API Key` 欄にあなたのキーを入力します（入力は伏せ字で保護されます）。
-3.  **AI プロンプトの入力**: `What to test?` 欄に「テストしたい内容」を入力します。
-    *   *例: 「`/admin` にアクセスした際に 403 Forbidden が返ってくるか確認するテンプレートを作って」*
-4.  **テンプレート生成**: `💡 Generate with AI` ボタンをクリックすると、AI が自動で YAML コードを生成し、画面中央のテキストエリアに入力されます。
-5.  **スキャンの実行**: `🚀 Run Quick Scan (Text)` ボタンを押すと、画面中央のテンプレートを用いた簡易スキャンがその場で開始され、右側のパネルに結果が表示されます。
-
----
-
-## ⚠️ 免責事項 (Disclaimer)
-
-*   本ツールは、**ご自身が所有するシステム、または明示的なスキャン許可を得ているターゲットに対するセキュリティ監査・研究目的**でのみ使用してください。
-*   許可を得ていない第三者のシステムに対する脆弱性スキャン行為は、法律で禁止されている場合があります。
-*   本ツールの使用によって生じた直接的・間接的な損害について、開発者は一切の責任を負いません。
+1.  **Set Target**: Input the target URL/IP in the `Target URL / IP` field in the top-left panel.
+2.  **Enter API Key**: Provide your Gemini API key in the `Gemini API Key` field (input is masked for security).
+3.  **Prompt the AI**: Describe what you want to test in the `What to test?` text area.
+    *   *Example: "Create a template to check if accessing `/admin` returns a 403 Forbidden status code."*
+4.  **Generate**: Click the `💡 Generate with AI` button. The generated YAML code will appear in the quick template editor in the center.
+5.  **Scan**: Click `🚀 Run Quick Scan (Text)` to execute the template against the target and see results in the right panel.
 
 ---
 
-## 📝 ライセンス
+## ⚠️ Disclaimer
 
-このプロジェクトは **MIT ライセンス**のもとで公開されています。詳細は `LICENSE` ファイルを参照してください。
+*   This tool is for **authorized security testing and educational research purposes only**.
+*   Do not scan targets without explicit prior permission from the owner.
+*   The developer assumes no liability for any misuse or damage caused by this application.
+
+---
+
+## 📝 License
+
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
+
+---
+
+## 🇯🇵 日本語概要 (Japanese Overview)
+
+LogosCyber は、Google Gemini API を活用して自然言語のプロンプトから **Nuclei 互換の脆弱性スキャン用 YAML テンプレート**を自動生成し、その場ですぐにターゲットに対して簡易スキャンを実行できる Rust 製のネイティブ GUI アプリケーションです。
+
+*   **自然言語からの生成**: 「`/admin` にアクセスした際に 403 Forbidden が返ってくるか確認するテンプレートを作って」などの指示からYAMLを自動生成。
+*   **直接通信**: ローカルプロキシを中継せず、直接 Gemini API と通信するため安全です。
+*   **軽量・高速**: `eframe` (egui) を用いて構築されており、極めて少ないメモリ消費で動作します。
+
+*(※詳細なビルド方法や使い方は、上記の英語セクションをご参照ください)*
