@@ -69,6 +69,36 @@ This project is licensed under the **MIT License**. See the `LICENSE` file for d
 
 ---
 
+## 🧠 LogosCyber vs. Anthropic's Claude Mythos
+
+Here is a quick overview of how **LogosCyber** compares to Anthropic's restricted cybersecurity model, **Claude Mythos**:
+
+| Feature / Dimension | 🧠 Anthropic's Claude Mythos | 🛡️ LogosCyber (This Tool) |
+| :--- | :--- | :--- |
+| **Concept & Nature** | A closed-source, military/government-restricted frontier AI model. | An open-source, lightweight, local-first developer utility. |
+| **Operation Model** | Autonomous agent that finds and exploits vulnerabilities internally. | Uses general LLMs to compile natural language into Nuclei YAML. |
+| **Execution Engine** | Monolithic AI agent handles both reasoning and packet execution. | Hybrid: AI handles template generation; a deterministic **Rust engine** runs the scan. |
+| **Availability** | Restricted and unreleased to the public due to dual-use offense risks. | Openly available on GitHub; you bring your own Gemini/LLM API key. |
+| **Footprint** | Extremely heavy computing requirements. | Ultra-lightweight (consumes only a few MBs of RAM). |
+
+### Why LogosCyber's Hybrid Approach?
+*   **Privacy & Sovereignty**: Directly connects to Google's Gemini API with your own key—no intermediate proxies.
+*   **No Safety Gatekeeping**: Automatically sets Gemini's safety settings to `BLOCK_NONE` to prevent false positive safety blocks on benign vulnerability templates.
+*   **Deterministic Rust Speed**: AI is only used for the creative phase (generating the YAML code). The actual HTTP request execution and regex pattern matching are delegated to a native Rust binary.
+
+---
+
+### 🇯🇵 LogosCyber と Anthropic's Claude Mythos の違い
+
+LogosCyber と、Anthropicが発表したサイバーセキュリティ特化型モデル「Claude Mythos」の主な違いは以下の通りです。
+
+*   **設計コンセプト**: Claude Mythos は一般非公開の超巨大・特化型AIモデルですが、LogosCyber は「開発者が手元で安全かつ軽量に動かせるローカルファーストのオープンソースツール」です。
+*   **知能の役割分担（ハイブリッド設計）**: MythosはAI自身がスキャンや攻撃コードの実行まで行いますが、LogosCyberは**「テンプレート（YAML）の生成フェーズのみをAI（Gemini）に任せ、実際のスキャン実行はRust製の超軽量エンジンに任せる」**という役割分担を行っています。
+*   **自己主権（Sovereignty）**: ユーザー自身のAPIキーで直接Google APIと通信するため、データが他のプロキシに吸い込まれるリスクがありません。
+
+
+---
+
 ## 🇯🇵 日本語概要 (Japanese Overview)
 
 LogosCyber は、Google Gemini API を活用して自然言語のプロンプトから **Nuclei 互換の脆弱性スキャン用 YAML テンプレート**を自動生成し、その場ですぐにターゲットに対して簡易スキャンを実行できる Rust 製のネイティブ GUI アプリケーションです。
