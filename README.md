@@ -2,6 +2,8 @@
 
 <p align="center">
   <img src="assets/logos_cyber_owl.png" alt="LogosCyber Owl Icon" width="250" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);"/>
+  <br>
+  <span>Developed by <b><a href="https://github.com/olbin-dev">@olbin-dev</a></b></span>
 </p>
 
 LogosCyber is a lightweight native desktop GUI application written in Rust. It leverages the Google Gemini API to automatically generate **Nuclei-compatible YAML vulnerability scanning templates** from natural language prompts, allowing you to run quick verification scans against your targets immediately.

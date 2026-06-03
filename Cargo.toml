@@ -2,6 +2,11 @@
 name = "logos_cyber"
 version = "0.1.0"
 edition = "2024"
+authors = ["olbin-dev"]
+description = "LLM-Powered Nuclei Template Generator & Scanner written in Rust"
+homepage = "https://github.com/olbin-dev/logos-cyber"
+repository = "https://github.com/olbin-dev/logos-cyber"
+license = "MIT"
 
 [dependencies]
 eframe = "0.34.2"
