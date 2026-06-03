@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogosCyber - LLM-Powered Nuclei Template Generator & Scanner</title>
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #131a2c;
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: #1e293b;
+            --glow-color: rgba(0, 242, 254, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Grid & Glow background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.1) 0%, rgba(79, 172, 254, 0.05) 50%, transparent 100%);
+            z-index: -1;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: rgba(11, 15, 25, 0.8);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .logo-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Lang Switcher */
+        .lang-switch {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            display: flex;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .lang-switch:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--glow-color);
+        }
+
+        .lang-btn {
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .lang-btn.active {
+            color: var(--accent-cyan);
+        }
+
+        .btn-github {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-github:hover {
+            border-color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #0b0f19;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Showcases */
+        .showcase-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 16px;
+            padding: 6px;
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(79, 172, 254, 0.1));
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin-bottom: 6rem;
+        }
+
+        .showcase-img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.05);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .feature-h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* How to Use Section */
+        .how-to-use {
+            padding: 4rem 0;
+            background-color: rgba(19, 26, 44, 0.3);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .steps-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #0b0f19;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .step-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            flex-grow: 1;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Codeblock styling */
+        .codeblock {
+            background-color: #0b0f19;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            color: #e2e8f0;
+        }
+
+        .code-comment { color: #64748b; }
+        .code-keyword { color: #f43f5e; }
+        .code-value { color: #10b981; }
+
+        /* Multilingual switching classes */
+        .lang-en {
+            display: block;
+        }
+
+        .lang-ja {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            text-decoration: none;
+            color: var(--text-muted);
+        }
+
+        .footer-logo img {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+        }
+
+        .footer-logo span {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+            .step-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo-area">
+                <img src="assets/icon.png" alt="LogosCyber logo" class="logo-img">
+                <span class="logo-text">LogosCyber</span>
+            </a>
+            
+            <div class="nav-actions">
+                <!-- Multi-Language Switch -->
+                <div class="lang-switch" id="langSwitcher">
+                    <span class="lang-btn active" id="btnEn">EN</span>
+                    <span style="color: var(--border-color)">|</span>
+                    <span class="lang-btn" id="btnJa">JA</span>
+                </div>
+                
+                <a href="https://github.com/olbin-dev/logos-cyber" class="btn-github" target="_blank">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title lang-en">LLM-Powered <span>Nuclei Template</span> Generator & Scanner</h1>
+            <h1 class="hero-title lang-ja">LLM連携型 <span>Nucleiテンプレート</span> 自動生成 ＆ スキャナー</h1>
+            
+            <p class="hero-desc lang-en">Generate Nuclei-compatible YAML vulnerability scanning templates from natural language using Gemini API, and execute quick security verification tests against your targets immediately.</p>
+            <p class="hero-desc lang-ja">Gemini APIを活用し、自然言語のプロンプトからNuclei互換のYAMLテンプレートを自動生成。その場ですぐにターゲットに対して脆弱性スキャンのテストを実行できます。</p>
+            
+            <div class="hero-buttons">
+                <a href="https://github.com/olbin-dev/logos-cyber" class="btn-primary" target="_blank">
+                    <i class="fa-solid fa-code"></i>
+                    <span class="lang-en">View on GitHub</span>
+                    <span class="lang-ja">GitHubでコードを見る</span>
+                </a>
+                <a href="#how-to" class="btn-secondary">
+                    <span class="lang-en">Quick Start Guide</span>
+                    <span class="lang-ja">クイックスタートガイド</span>
+                </a>
+            </div>
+
+            <!-- Beautiful App Screenshot Mockup -->
+            <div class="showcase-container">
+                <img src="assets/logo.png" alt="LogosCyber Shield Logo" class="showcase-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title lang-en">Core Features</h2>
+            <h2 class="section-title lang-ja">コア機能</h2>
+            
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <i class="fa-solid fa-brain feature-icon"></i>
+                    <h3 class="feature-h3 lang-en">AI-Driven Generation</h3>
+                    <h3 class="feature-h3 lang-ja">AIテンプレート自動生成</h3>
+                    <p class="feature-p lang-en">Describe what you want to test in natural language, and Gemini API will instantly write the corresponding YAML Nuclei templates.</p>
+                    <p class="feature-p lang-ja">「テストしたい脆弱性の挙動」を日常的な日本語や英語で記述するだけで、Gemini APIが即座に対応するYAMLスキャンテンプレートを作成します。</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <i class="fa-solid fa-shield-halved feature-icon"></i>
+                    <h3 class="feature-h3 lang-en">Safe Direct API Connection</h3>
+                    <h3 class="feature-h3 lang-ja">セキュアな直結通信</h3>
+                    <p class="feature-p lang-en">Direct HTTPS connection to Google Gemini API. No third-party proxy required. Rest assured your API keys and targets are kept private.</p>
+                    <p class="feature-p lang-ja">サードパーティのプロキシを経由せず、アプリからGoogle Gemini APIに直接接続。セキュリティ監査に必要なAPIキーや通信情報が漏洩しません。</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <i class="fa-solid fa-bolt-lightning feature-icon"></i>
+                    <h3 class="feature-h3 lang-en">On-the-Fly Scanning</h3>
+                    <h3 class="feature-h3 lang-ja">即時テストスキャン</h3>
+                    <p class="feature-p lang-en">Execute the generated template on your target host with a single click. View real-time status and extract matching payload info.</p>
+                    <p class="feature-p lang-ja">生成されたYAMLテンプレートを即時ターゲットに実行。レスポンスのチェックや正規表現によるマッチ情報をリアルタイムに出力します。</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card">
+                    <i class="fa-brands fa-rust feature-icon"></i>
+                    <h3 class="feature-h3 lang-en">Lightweight Rust Native</h3>
+                    <h3 class="feature-h3 lang-ja">超軽量 Rust ネイティブ</h3>
+                    <p class="feature-p lang-en">Built with Rust and egui. Native performance without the bloat of web technologies like Electron. Super memory-efficient.</p>
+                    <p class="feature-p lang-ja">Rustおよびeguiによるネイティブ動作。Electronのような重いエンジンを持たず、起動も一瞬でメモリをほぼ消費しません。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Use Section -->
+    <section class="how-to-use" id="how-to">
+        <div class="container">
+            <h2 class="section-title lang-en">Quick Start Guide</h2>
+            <h2 class="section-title lang-ja">クイックスタートガイド</h2>
+            
+            <div class="steps-container">
+                <!-- Step 1 -->
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4 class="step-title lang-en">Compile and Run the App</h4>
+                        <h4 class="step-title lang-ja">アプリをビルドして実行する</h4>
+                        <p class="step-desc lang-en">Clone the repository and compile it with Cargo.</p>
+                        <p class="step-desc lang-ja">リポジトリをクローンし、Cargoを使用してビルド・実行します。</p>
+                        <div class="codeblock">
+                            <span class="code-comment"># Clone and build</span><br>
+                            git clone https://github.com/olbin-dev/logos-cyber.git<br>
+                            <span class="code-keyword">cd</span> logos-cyber<br>
+                            cargo run --release
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4 class="step-title lang-en">Set Gemini API Key & Prompts</h4>
+                        <h4 class="step-title lang-ja">Gemini APIキーとプロンプトの設定</h4>
+                        <p class="step-desc lang-en">Enter your Gemini API key in the configuration panel. Describe your test target URL and prompt in natural language.</p>
+                        <p class="step-desc lang-ja">アプリのサイドパネルにGemini APIキーを入力し、テスト対象のURLと「テストしたい脆弱性内容」をプロンプトに入力します。</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h4 class="step-title lang-en">Generate and Scan</h4>
+                        <h4 class="step-title lang-ja">テンプレートの生成とテスト実行</h4>
+                        <p class="step-desc lang-en">Click "Generate with AI" to generate the YAML template. Review the code, then click "Run Quick Scan" to run the audit against the target URL.</p>
+                        <p class="step-desc lang-ja">「Generate with AI」をクリックしてテンプレート（YAML）を出力させ、内容を確認後「Run Quick Scan」でターゲットに対する脆弱性監査を実行します。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <a href="#" class="footer-logo">
+                <img src="assets/icon.png" alt="LogosCyber Icon">
+                <span>LogosCyber</span>
+            </a>
+            <p>&copy; 2026 LogosCyber. Licensed under MIT.</p>
+        </div>
+    </footer>
+
+    <!-- Multilingual Switcher Script -->
+    <script>
+        const btnEn = document.getElementById('btnEn');
+        const btnJa = document.getElementById('btnJa');
+        const elementsEn = document.querySelectorAll('.lang-en');
+        const elementsJa = document.querySelectorAll('.lang-ja');
+
+        function setLanguage(lang) {
+            if (lang === 'ja') {
+                btnJa.classList.add('active');
+                btnEn.classList.remove('active');
+                elementsJa.forEach(el => el.style.display = 'block');
+                elementsEn.forEach(el => el.style.display = 'none');
+            } else {
+                btnEn.classList.add('active');
+                btnJa.classList.remove('active');
+                elementsEn.forEach(el => el.style.display = 'block');
+                elementsJa.forEach(el => el.style.display = 'none');
+            }
+        }
+
+        btnEn.addEventListener('click', () => setLanguage('en'));
+        btnJa.addEventListener('click', () => setLanguage('ja'));
+
+        // Initialize based on browser language or URL query (?lang=ja)
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlLang = urlParams.get('lang');
+        const userLang = navigator.language || navigator.userLanguage;
+
+        if (urlLang === 'ja' || (urlLang === null && userLang.startsWith('ja'))) {
+            setLanguage('ja');
+        } else {
+            setLanguage('en');
+        }
+    </script>
+</body>
+</html>
