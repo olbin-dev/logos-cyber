@@ -1,0 +1,22 @@
+id: git-config-exposure
+info:
+  name: Git Config Exposure
+  author: pdteam
+  severity: medium
+  description: Detects exposed .git/config (fixture aligned with official nuclei-templates style).
+  tags:
+    - exposure
+    - git
+    - misconfig
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.git/config"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "[core]"
+      - type: status
+        status:
+          - 200

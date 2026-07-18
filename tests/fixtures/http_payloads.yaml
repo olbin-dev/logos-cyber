@@ -1,0 +1,21 @@
+id: example-payloads
+info:
+  name: Payload Pitchfork Fixture
+  author: logoscyber
+  severity: info
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/{{path}}"
+    payloads:
+      path:
+        - robots.txt
+        - sitemap.xml
+    attack: batteringram
+    stop-at-first-match: true
+    matchers:
+      - type: word
+        words:
+          - "User-agent"
+          - "Sitemap"
+        condition: or

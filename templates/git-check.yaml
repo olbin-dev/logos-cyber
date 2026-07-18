@@ -1,0 +1,19 @@
+id: git-exposure-check
+info:
+  name: Git Repository Exposure Check
+  author: user
+  severity: high
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.git/config"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "repositoryformatversion"
+          - "[core]"
+        condition: or
+      - type: status
+        status:
+          - 200

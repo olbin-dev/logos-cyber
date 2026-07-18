@@ -1,0 +1,12 @@
+id: dns-only-fixture
+info:
+  name: DNS Only (unsupported)
+  author: logoscyber
+  severity: info
+dns:
+  - name: "{{FQDN}}"
+    type: A
+    matchers:
+      - type: word
+        words:
+          - "1.1.1.1"

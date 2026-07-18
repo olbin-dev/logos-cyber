@@ -28,12 +28,27 @@ DaviCore（ローカルプロキシ）を中継地点とするアーキテクチ
 ターミナルで以下の操作を行い、動作検証を実施してください。
 
 ```bash
-cd /Volumes/ELE2/Security/Nuclei/logos_cyber
+cd /Volumes/ELE3/developer/32_LogosCyber
 cargo run
 ```
 1. アプリ起動後、左側パネルの「Gemini API Key」にキーを入力する。
 2. 「What to test?」にプロンプトを入力し、「💡 Generate with AI」ボタンを押す。
 3. 中央のScan Resultsに、正常に生成されたYAMLが出力されるか確認する。
+
+## Proton 非アプリ常時経由（2026-07-19）
+
+**Proton VPN アプリは使わない。** スキャン専用に WireGuard `.conf` + tunmux `--local-proxy`（SOCKS）を使う。
+
+詳細: [docs/PROTON_SOCKS.md](docs/PROTON_SOCKS.md)
+
+1. [account.protonvpn.com](https://account.protonvpn.com) → Downloads → WireGuard configuration →  
+   `~/Library/Application Support/LogosCyber/proton.conf`
+2. `cargo install --git https://github.com/CaddyGlow/tunmux tunmux`
+3. `./scripts/proton_socks/start_socks.sh` または `./scripts/proton_socks/install_launch_agent.sh`
+4. LogosCyber 既定: Proxy `socks5://127.0.0.1:1080` / Require Proton proxy ON  
+   → 不通時はスキャン拒否（Kill switch）。Gemini は直結のまま。
+
+設定上書き: `~/.config/logos_cyber/config.toml`（`config.toml.example` 参照）
 
 ## 今後の開発タスク候補
 - API直結テストが成功した場合、生成されたYAMLをそのままテストスキャンに流し込めるかの確認。

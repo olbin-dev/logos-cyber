@@ -1,0 +1,33 @@
+id: example-raw-chain
+info:
+  name: Raw Request Chain Fixture
+  author: logoscyber
+  severity: info
+http:
+  - raw:
+      - |
+        GET /step1 HTTP/1.1
+        Host: {{Hostname}}
+
+    extractors:
+      - type: regex
+        name: sid
+        part: body
+        group: 1
+        regex:
+          - "session=([a-z0-9]+)"
+        internal: true
+
+  - raw:
+      - |
+        GET /step2?sid={{sid}} HTTP/1.1
+        Host: {{Hostname}}
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "ok"

@@ -1,0 +1,38 @@
+id: example-headers-body
+info:
+  name: Headers and Body Fixture
+  author:
+    - logoscyber
+  severity: info
+  tags:
+    - tech
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/ping"
+    headers:
+      Content-Type: application/json
+      X-Scan: LogosCyber
+    body: |
+      {"ping":"{{randstr}}"}
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: header
+        words:
+          - "application/json"
+        case-insensitive: true
+      - type: word
+        part: body
+        words:
+          - "pong"
+    extractors:
+      - type: regex
+        name: token
+        group: 1
+        regex:
+          - '"token"\s*:\s*"([^"]+)"'
+        internal: true

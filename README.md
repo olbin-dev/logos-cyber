@@ -18,9 +18,13 @@ LogosCyber is a lightweight native desktop GUI application written in Rust. It l
     Instantly execute the generated or custom YAML template against a target URL to check for vulnerability matches.
 *   **📂 Multi-Template Directory Loading**:
     Load a local directory containing multiple Nuclei templates to run sequential scans.
-*   **🔒 Secure Direct Connection**:
-    *   No local proxies required. The app communicates directly with Google's Gemini API over HTTPS, ensuring your API keys and target details remain confidential.
+*   **🔒 Gemini Direct + Scan via SOCKS**:
+    *   Gemini API stays a direct HTTPS connection (not forced through VPN).
+    *   Scan traffic defaults to `socks5://127.0.0.1:1080` with **Require Proton proxy** kill-switch (scan refused if the proxy is down).
     *   Optimized safety settings (`BLOCK_NONE`) prevent AI from falsely blocking security-related templates.
+*   **🛡️ Proton without the Proton VPN app**:
+    *   Use a dashboard WireGuard `.conf` + `tunmux --local-proxy` so only LogosCyber scans exit via Proton.
+    *   See [docs/PROTON_SOCKS.md](docs/PROTON_SOCKS.md).
 *   **🚀 Lightweight Native UI**:
     Uses the `eframe` (egui) library to provide a fast and lightweight native application experience (consuming only a few megabytes of RAM).
 
@@ -30,6 +34,7 @@ LogosCyber is a lightweight native desktop GUI application written in Rust. It l
 
 *   **Rust (Cargo)** toolchain installed.
 *   **Google Gemini API Key** (available for free via Google AI Studio).
+*   **Optional (recommended for scanning)**: Proton WireGuard `.conf` + [tunmux](https://github.com/CaddyGlow/tunmux) local SOCKS — see [docs/PROTON_SOCKS.md](docs/PROTON_SOCKS.md).
 
 ---
 
@@ -48,12 +53,13 @@ cargo run --release
 
 ## 📖 How to Use
 
-1.  **Set Target**: Input the target URL/IP in the `Target URL / IP` field in the top-left panel.
-2.  **Enter API Key**: Provide your Gemini API key in the `Gemini API Key` field (input is masked for security).
-3.  **Prompt the AI**: Describe what you want to test in the `What to test?` text area.
+1.  **Start Proton SOCKS** (recommended): place `proton.conf`, then `./scripts/proton_socks/start_socks.sh` (or install the LaunchAgent). Confirm UI shows `Proxy: OK`.
+2.  **Set Target**: Input the target URL/IP in the `Target URL / IP` field in the top-left panel.
+3.  **Enter API Key**: Provide your Gemini API key in the `Gemini API Key` field (input is masked for security).
+4.  **Prompt the AI**: Describe what you want to test in the `What to test?` text area.
     *   *Example: "Create a template to check if accessing `/admin` returns a 403 Forbidden status code."*
-4.  **Generate**: Click the `💡 Generate with AI` button. The generated YAML code will appear in the quick template editor in the center.
-5.  **Scan**: Click `🚀 Run Quick Scan (Text)` to execute the template against the target and see results in the right panel.
+5.  **Generate**: Click the `💡 Generate with AI` button. The generated YAML code will appear in the quick template editor in the center.
+6.  **Scan**: Click `🚀 Run Quick Scan (Text)`. With Require Proton proxy ON, scans are blocked if SOCKS is down (home IP leak prevention).
 
 ---
 
