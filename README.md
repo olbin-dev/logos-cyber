@@ -1,5 +1,9 @@
 # 🛡️ LogosCyber: LLM-Powered Nuclei Template Generator & Scanner
 
+> **[🔥 Product page: LogosCyber](https://olbin.dev/logos-cyber.html)** · [日本語](https://olbin.dev/logos-cyber-ja.html)  
+> *LLM-powered Nuclei template generator & scanner — native Rust GUI by olbin.dev.*
+
+
 <p align="center">
   <img src="assets/logos_cyber_owl.png" alt="LogosCyber Owl Icon" width="250" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);"/>
   <br>
@@ -42,7 +46,7 @@ LogosCyber is a lightweight native desktop GUI application written in Rust. It l
 
 ```bash
 # Clone the repository
-git clone https://github.com/OS-Sovereign/logos-cyber.git
+git clone https://github.com/olbin-dev/logos-cyber.git
 cd logos-cyber
 
 # Build and run the application
@@ -116,3 +120,17 @@ LogosCyber は、Google Gemini API を活用して自然言語のプロンプト
 *   **軽量・高速**: `eframe` (egui) を用いて構築されており、極めて少ないメモリ消費で動作します。
 
 *(※詳細なビルド方法や使い方は、上記の英語セクションをご参照ください)*
+
+
+## Related projects ([olbin.dev](https://olbin.dev/))
+
+| Project | Role |
+|---------|------|
+| [cAgent](https://github.com/olbin-dev/cAgent) | OpenClaw ↔ AgentKit JSON-RPC bridge — [case study](https://olbin.dev/factory.html) |
+| [Vault Sync for Dropbox](https://github.com/olbin-dev/plugin) | Obsidian ↔ Dropbox sync — [product page](https://olbin.dev/vault-sync.html) |
+| [Local LLM Brain Chat](https://github.com/olbin-dev/obisidian-Plugin-LocalLLM) | Obsidian ↔ local llama.cpp — [product page](https://olbin.dev/local-llm.html) |
+| [LogosCyber](https://github.com/olbin-dev/logos-cyber) | Nuclei template AI scanner — [product page](https://olbin.dev/logos-cyber.html) |
+| [Terminal Image Paster](https://github.com/olbin-dev/Terminal-image-paster) | VS Code clipboard→terminal paths — [product page](https://olbin.dev/terminal-image-paster.html) |
+| [Sovereign Systems Log](https://github.com/olbin-dev/SSjapantokyokugahara) | Technical log — [product page](https://olbin.dev/ss-log.html) |
+| [All projects](https://olbin.dev/projects.html) | Full catalog on olbin.dev |
+
